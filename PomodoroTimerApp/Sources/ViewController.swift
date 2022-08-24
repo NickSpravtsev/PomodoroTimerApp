@@ -51,12 +51,12 @@ class ViewController: UIViewController {
             if currentSecondsRemain == -1 {
                 timerLabel.text = timeInSecondsToString(seconds: 0)
                 timer?.invalidate()
-                changeTimePeriod()
+                autoChangeTimePeriod()
             }
         }
     }
 
-    private func changeTimePeriod() {
+    private func autoChangeTimePeriod() {
         if isWorkTime {
             isWorkTime = false
             controlButton.tintColor = .systemGreen
@@ -75,6 +75,52 @@ class ViewController: UIViewController {
             currentSecondsRemain = workSeconds
             accurateTimerCount = 1000
             runTimer()
+        }
+    }
+
+    private func goToNextTimePeriod() {
+        if isWorkTime {
+            isWorkTime = false
+            isTimerStarted = false
+            controlButton.tintColor = .systemGreen
+            controlButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            timerLabel.textColor = .systemGreen
+            timerLabel.text = timeInSecondsToString(seconds: restSeconds)
+            setupCircularProgressBarView(color: .systemGreen, duration: restSeconds, autostart: false, clockwise: false)
+            currentSecondsRemain = restSeconds
+            accurateTimerCount = 1000
+            timer?.invalidate()
+        } else {
+            isWorkTime = true
+            isTimerStarted = false
+            controlButton.tintColor = .systemRed
+            controlButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            timerLabel.textColor = .systemRed
+            timerLabel.text = timeInSecondsToString(seconds: workSeconds)
+            setupCircularProgressBarView(color: .systemRed, duration: workSeconds, autostart: false, clockwise: true)
+            currentSecondsRemain = workSeconds
+            accurateTimerCount = 1000
+            timer?.invalidate()
+        }
+    }
+
+    private func repeatCurrentTimePeriod() {
+        if isWorkTime {
+            isTimerStarted = false
+            controlButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            timerLabel.text = timeInSecondsToString(seconds: workSeconds)
+            setupCircularProgressBarView(color: .systemRed, duration: workSeconds, autostart: false, clockwise: true)
+            currentSecondsRemain = workSeconds
+            timer?.invalidate()
+
+        } else {
+            isTimerStarted = false
+            controlButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            timerLabel.text = timeInSecondsToString(seconds: restSeconds)
+            setupCircularProgressBarView(color: .systemGreen, duration: restSeconds, autostart: false, clockwise: false)
+            currentSecondsRemain = restSeconds
+            accurateTimerCount = 1000
+            timer?.invalidate()
         }
     }
 
@@ -109,13 +155,39 @@ class ViewController: UIViewController {
 
         // Making shadow for button
         button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOpacity = 0.2
         button.layer.shadowOffset = .zero
         button.layer.shadowRadius = 10
         button.layer.shouldRasterize = true
         button.layer.rasterizationScale = UIScreen.main.scale
 
         button.addTarget(self, action: #selector(controlButtonPressed), for: .touchUpInside)
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var backwardButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "backward.frame"), for: .normal)
+        button.contentHorizontalAlignment = .fill
+        button.contentVerticalAlignment = .fill
+        button.tintColor = .black
+
+        button.addTarget(self, action: #selector(backwardButtonPressed), for: .touchUpInside)
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var nextButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "forward.frame"), for: .normal)
+        button.contentHorizontalAlignment = .fill
+        button.contentVerticalAlignment = .fill
+        button.tintColor = .black
+
+        button.addTarget(self, action: #selector(nextButtonPressed), for: .touchUpInside)
 
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -135,12 +207,16 @@ class ViewController: UIViewController {
     private func setupHierarchy(){
         view.addSubview(timerLabel)
         view.addSubview(controlButton)
+        view.addSubview(backwardButton)
+        view.addSubview(nextButton)
     }
 
     private func setupLayout() {
         setupTimerLabel()
         setupControlButton()
         setupCircularProgressBarView(color: UIColor.systemRed, duration: currentSecondsRemain, autostart: false, clockwise: true)
+        setupBackwardButton()
+        setupNextButton()
     }
 
     private func setupTimerLabel() {
@@ -156,6 +232,24 @@ class ViewController: UIViewController {
             make.centerX.equalTo(view)
             make.width.equalTo(70)
             make.height.equalTo(70)
+        }
+    }
+
+    private func setupBackwardButton() {
+        backwardButton.snp.makeConstraints { make in
+            make.centerY.equalTo(controlButton.snp.centerY)
+            make.right.equalTo(controlButton.snp.left).offset(-20)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+    }
+
+    private func setupNextButton() {
+        nextButton.snp.makeConstraints { make in
+            make.centerY.equalTo(controlButton.snp.centerY)
+            make.left.equalTo(controlButton.snp.right).offset(20)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
         }
     }
 
@@ -185,5 +279,13 @@ class ViewController: UIViewController {
 
             isTimerStarted = true
         }
+    }
+
+    @objc private func backwardButtonPressed() {
+        repeatCurrentTimePeriod()
+    }
+
+    @objc private func nextButtonPressed() {
+        goToNextTimePeriod()
     }
 }
