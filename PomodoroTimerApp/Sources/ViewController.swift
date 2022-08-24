@@ -17,10 +17,10 @@ class ViewController: UIViewController {
     private var isTimerStarted = false
 
     //Timer
-    private var timer = Timer()
+    private var timer: Timer?
     private var workSeconds = 25
     private var restSeconds = 5
-    private var currentSecondsRemain = 5
+    private var currentSecondsRemain = 25
 
     // MARK: - Methods
 
@@ -30,17 +30,36 @@ class ViewController: UIViewController {
 
     @objc private func updateViewByTimer() {
         if currentSecondsRemain < 1 {
-            timer.invalidate()
+            timer?.invalidate()
         } else {
             currentSecondsRemain -= 1
-            timerLabel.text = timeCountToString(seconds: currentSecondsRemain)
+            timerLabel.text = timeInSecondsToString(seconds: currentSecondsRemain)
             if currentSecondsRemain == 0 {
-                timer.invalidate()
+                timer?.invalidate()
+                changeTimePeriod()
             }
         }
     }
 
-    private func timeCountToString(seconds: Int) -> String {
+    private func changeTimePeriod() {
+        if isWorkTime {
+            isWorkTime = false
+            controlButton.tintColor = .systemGreen
+            timerLabel.textColor = .systemGreen
+            timerLabel.text = timeInSecondsToString(seconds: restSeconds)
+            currentSecondsRemain = restSeconds
+            runTimer()
+        } else {
+            isWorkTime = true
+            controlButton.tintColor = .systemRed
+            timerLabel.textColor = .systemRed
+            timerLabel.text = timeInSecondsToString(seconds: workSeconds)
+            currentSecondsRemain = workSeconds
+            runTimer()
+        }
+    }
+
+    private func timeInSecondsToString(seconds: Int) -> String {
         let time = TimeInterval(seconds)
         let formatter = DateComponentsFormatter()
         formatter.zeroFormattingBehavior = .pad
@@ -52,7 +71,7 @@ class ViewController: UIViewController {
 
     private lazy var timerLabel: UILabel = {
         let label = UILabel()
-        label.text = timeCountToString(seconds: workSeconds)
+        label.text = timeInSecondsToString(seconds: workSeconds)
         label.font = UIFont.systemFont(ofSize: 50)
         label.textColor = .systemRed
 
@@ -115,7 +134,7 @@ class ViewController: UIViewController {
     @objc private func controlButtonPressed() {
 
         if isTimerStarted {
-            timer.invalidate()
+            timer?.invalidate()
             controlButton.setImage(UIImage(systemName: "play"), for: .normal)
             isTimerStarted = false
         } else {
