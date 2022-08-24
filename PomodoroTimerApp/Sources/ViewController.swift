@@ -12,6 +12,11 @@ class ViewController: UIViewController {
 
     // MARK: - Properties
 
+    // Lock portrait screen orientation
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
     // Bool flags
     private var isWorkTime = true
     private var isTimerStarted = false
@@ -172,7 +177,7 @@ class ViewController: UIViewController {
         button.setImage(UIImage(systemName: "backward.frame"), for: .normal)
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-        button.tintColor = .black
+        button.tintColor = .systemGray
 
         button.addTarget(self, action: #selector(backwardButtonPressed), for: .touchUpInside)
 
@@ -185,7 +190,7 @@ class ViewController: UIViewController {
         button.setImage(UIImage(systemName: "forward.frame"), for: .normal)
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-        button.tintColor = .black
+        button.tintColor = .systemGray
 
         button.addTarget(self, action: #selector(nextButtonPressed), for: .touchUpInside)
 
@@ -193,11 +198,29 @@ class ViewController: UIViewController {
         return button
     }()
 
+    private lazy var appNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Pomodoro"
+        label.textColor = .systemRed
+        label.font = UIFont.boldSystemFont(ofSize: 40)
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var logoImageView: UIImageView = {
+        let image = UIImage(named: "logo")?.withTintColor(.systemRed)
+        let imageView = UIImageView(image: image)
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = .systemGray6
         setupHierarchy()
         setupLayout()
     }
@@ -209,6 +232,8 @@ class ViewController: UIViewController {
         view.addSubview(controlButton)
         view.addSubview(backwardButton)
         view.addSubview(nextButton)
+        view.addSubview(appNameLabel)
+        view.addSubview(logoImageView)
     }
 
     private func setupLayout() {
@@ -217,6 +242,8 @@ class ViewController: UIViewController {
         setupCircularProgressBarView(color: UIColor.systemRed, duration: currentSecondsRemain, autostart: false, clockwise: true)
         setupBackwardButton()
         setupNextButton()
+        setupAppNameLabel()
+        setupLogoImageView()
     }
 
     private func setupTimerLabel() {
@@ -250,6 +277,20 @@ class ViewController: UIViewController {
             make.left.equalTo(controlButton.snp.right).offset(20)
             make.width.equalTo(50)
             make.height.equalTo(50)
+        }
+    }
+
+    private func setupAppNameLabel() {
+        appNameLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(view)
+            make.bottom.equalTo(timerLabel.snp.top).offset(-220)
+        }
+    }
+
+    private func setupLogoImageView() {
+        logoImageView.snp.makeConstraints { make in
+            make.centerX.equalTo(view)
+            make.top.equalTo(appNameLabel.snp.bottom).offset(5)
         }
     }
 
