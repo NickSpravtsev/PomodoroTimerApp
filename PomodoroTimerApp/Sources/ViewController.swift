@@ -13,27 +13,35 @@ class ViewController: UIViewController {
     // MARK: - Properties
 
     // Bool flags
-    var isWorkTime = true
-    var isStarted = false
+    private var isWorkTime = true
+    private var isTimerStarted = false
 
     //Timer
-    var timer = Timer()
-    var workCount = 25
-    var restCount = 5
-    var currentCount = 25
+    private var timer = Timer()
+    private var workSeconds = 25
+    private var restSeconds = 5
+    private var currentSecondsRemain = 5
 
     // MARK: - Methods
 
-    func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
+    private func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: (#selector(updateViewByTimer)), userInfo: nil, repeats: true)
     }
 
-    @objc func updateTimer() {
-        currentCount -= 1
-        timerLabel.text = timeCountToString(time: TimeInterval(currentCount))
+    @objc private func updateViewByTimer() {
+        if currentSecondsRemain < 1 {
+            timer.invalidate()
+        } else {
+            currentSecondsRemain -= 1
+            timerLabel.text = timeCountToString(seconds: currentSecondsRemain)
+            if currentSecondsRemain == 0 {
+                timer.invalidate()
+            }
+        }
     }
 
-    func timeCountToString(time: TimeInterval) -> String {
+    private func timeCountToString(seconds: Int) -> String {
+        let time = TimeInterval(seconds)
         let formatter = DateComponentsFormatter()
         formatter.zeroFormattingBehavior = .pad
         formatter.allowedUnits = [.minute, .second]
@@ -44,7 +52,7 @@ class ViewController: UIViewController {
 
     private lazy var timerLabel: UILabel = {
         let label = UILabel()
-        label.text = "00:25"
+        label.text = timeCountToString(seconds: workSeconds)
         label.font = UIFont.systemFont(ofSize: 50)
         label.textColor = .systemRed
 
@@ -106,14 +114,14 @@ class ViewController: UIViewController {
 
     @objc private func controlButtonPressed() {
 
-        if isStarted {
+        if isTimerStarted {
             timer.invalidate()
             controlButton.setImage(UIImage(systemName: "play"), for: .normal)
-            isStarted = false
+            isTimerStarted = false
         } else {
             runTimer()
             controlButton.setImage(UIImage(systemName: "pause"), for: .normal)
-            isStarted = true
+            isTimerStarted = true
         }
     }
 }
