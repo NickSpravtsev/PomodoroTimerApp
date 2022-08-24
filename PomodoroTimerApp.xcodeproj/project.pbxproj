@@ -12,6 +12,7 @@
 		16F190DC28B57FD900602F28 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F190DB28B57FD900602F28 /* ViewController.swift */; };
 		16F190E128B57FDA00602F28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16F190E028B57FDA00602F28 /* Assets.xcassets */; };
 		16F190F128B5849000602F28 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 16F190F028B5849000602F28 /* SnapKit */; };
+		16F190F328B5A2E400602F28 /* CircularProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F190F228B5A2E400602F28 /* CircularProgressBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		16F190DB28B57FD900602F28 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		16F190E028B57FDA00602F28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		16F190E528B57FDA00602F28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16F190F228B5A2E400602F28 /* CircularProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +59,6 @@
 				16F190EE28B5838900602F28 /* Resources */,
 				16F190EB28B5834100602F28 /* Configuration */,
 				16F190EC28B5835900602F28 /* Sources */,
-				16F190DB28B57FD900602F28 /* ViewController.swift */,
 			);
 			path = PomodoroTimerApp;
 			sourceTree = "<group>";
@@ -74,6 +75,8 @@
 			isa = PBXGroup;
 			children = (
 				16F190ED28B5836500602F28 /* App */,
+				16F190DB28B57FD900602F28 /* ViewController.swift */,
+				16F190F228B5A2E400602F28 /* CircularProgressBarView.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -172,6 +175,7 @@
 			files = (
 				16F190DC28B57FD900602F28 /* ViewController.swift in Sources */,
 				16F190D828B57FD900602F28 /* AppDelegate.swift in Sources */,
+				16F190F328B5A2E400602F28 /* CircularProgressBarView.swift in Sources */,
 				16F190DA28B57FD900602F28 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
