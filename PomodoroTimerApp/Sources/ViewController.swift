@@ -48,12 +48,12 @@ class ViewController: UIViewController {
 
         accurateTimerCount = 1000
 
-        if currentSecondsRemain < 0 {
+        if currentSecondsRemain < 1 {
             timer?.invalidate()
         } else {
             currentSecondsRemain -= 1
             timerLabel.text = timeInSecondsToString(seconds: currentSecondsRemain)
-            if currentSecondsRemain == -1 {
+            if currentSecondsRemain == 0 {
                 timerLabel.text = timeInSecondsToString(seconds: 0)
                 timer?.invalidate()
                 autoChangeTimePeriod()
