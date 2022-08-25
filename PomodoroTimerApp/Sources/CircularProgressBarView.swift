@@ -15,6 +15,7 @@ class CircularProgressBarView: UIView {
     private var circleLayer = CAShapeLayer()
     private var startPoint = CGFloat()
     private var endPoint = CGFloat()
+
     // Path for animation
     private var circularPath = UIBezierPath()
 
@@ -73,7 +74,6 @@ class CircularProgressBarView: UIView {
 
         // Figure on progress bar
         addSubview(imageView)
-
     }
 
     func progressAnimation(duration: TimeInterval, autostart: Bool) {

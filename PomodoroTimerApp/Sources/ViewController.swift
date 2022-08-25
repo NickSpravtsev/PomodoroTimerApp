@@ -25,12 +25,11 @@ class ViewController: UIViewController {
     private var timer: Timer?
     private var workSeconds = 25
     private var restSeconds = 5
-    private var currentSecondsRemain = 25
+    private var currentSecondsRemain = 0
     private var accurateTimerCount = 1000
 
     // Progress bar
     private lazy var circularProgressBarView = CircularProgressBarView(frame: .zero)
-    private var circularViewDuration = 5
 
     // MARK: - Methods
 
@@ -117,7 +116,6 @@ class ViewController: UIViewController {
             setupCircularProgressBarView(color: .systemRed, duration: workSeconds, autostart: false, clockwise: true)
             currentSecondsRemain = workSeconds
             timer?.invalidate()
-
         } else {
             isTimerStarted = false
             controlButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -202,15 +200,16 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.text = "Pomodoro"
         label.textColor = .systemRed
-        label.font = UIFont.boldSystemFont(ofSize: 40)
+        label.font = UIFont.boldSystemFont(ofSize: 42)
 
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private lazy var logoImageView: UIImageView = {
-        let image = UIImage(named: "logo")?.withTintColor(.systemRed)
+        let image = UIImage(systemName: "timer", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40, weight: .bold))
         let imageView = UIImageView(image: image)
+        imageView.tintColor = .systemRed
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -221,6 +220,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
+        currentSecondsRemain = workSeconds
         setupHierarchy()
         setupLayout()
     }
@@ -290,7 +290,7 @@ class ViewController: UIViewController {
     private func setupLogoImageView() {
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalTo(view)
-            make.top.equalTo(appNameLabel.snp.bottom).offset(5)
+            make.top.equalTo(appNameLabel.snp.bottom).offset(10)
         }
     }
 
